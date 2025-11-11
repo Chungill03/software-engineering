@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>📝 할일 목록</h1>
+
+      <!-- 입력 영역 -->
+      <div class="input-area">
+        <input type="text" id="todoInput" placeholder="할 일을 입력하세요..." />
+        <button id="addBtn">추가</button>
+      </div>
+
+      <!-- 통계 -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalCount">0</div>
+          <div class="stat-label">전체</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="activeCount">0</div>
+          <div class="stat-label">진행중</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completedCount">0</div>
+          <div class="stat-label">완료</div>
+        </div>
+      </div>
+      <div id="errorMessage" style="display: none; color: red"></div>
+
+      <!-- 할일 목록 -->
+      <div id="todoList"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
