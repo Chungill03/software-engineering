@@ -57,8 +57,8 @@ async function toggleTodo(id) {
   const todoIndex = todos.findIndex((t) => t.id === id);
   if (todoIndex === -1) return;
 
-  const oldDone = todos[todoIndex].completed;
-  todos[todoIndex].done = !oldDone;
+  const oldValue = todos[todoIndex].completed;
+  todos[todoIndex].completed = !oldValue;
   renderTodos();
 
   try {
@@ -67,7 +67,7 @@ async function toggleTodo(id) {
     console.error("할일 상태 업데이트 실패:", error);
     showError("상태 변경에 실패했습니다. 다시 시도합니다.");
 
-    todos[todoIndex].completed = oldDone;
+    todos[todoIndex].completed = oldValue;
     renderTodos();
   }
 }
