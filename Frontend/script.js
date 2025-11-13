@@ -161,3 +161,4 @@ addBtn.addEventListener("click", addTodo);
 
 // 페이지 로드시 실행
 loadTodos();
+ 
