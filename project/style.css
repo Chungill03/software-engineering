@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.top {
+  background: #1f2937;
+  color: #fff;
+  padding: 12px 16px;
+}
+
+/* 첫화면에 다안띄우려는 코드 */
+.view {
+  display: none;
+}
+
+.view.is-active {
+  display: block;
+}
+
+.top_convert {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.top_convert button {
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+  cursor: pointer;
+}
+
+.top_convert .active {
+  background: #374151;
+  border-color: #374151;
+}
+
+.content {
+  padding: 20px;
+  position: relative;
+}
+
+.main_card {
+  background: #ffffff;
+  border: 10px solid #e5e7eb;
+  border-radius: 15px;
+  padding: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.card_title {
+  margin: 0 0 15px;
+  font-size: 20px;
+}
+
+/* 진행도 박스 */
+.status_list {
+  display: flex;
+  gap: 10px;
+}
+
+.status_box {
+  flex: 1;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+
+.status_box h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.status_box p {
+  margin: 0;
+  font-weight: 700;
+  font-size: 25px;
+}
+
+/* 멤버 박스 */
+.member_box {
+  margin-top: 18px;
+  background: #f4f4f5;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.member_title {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.member_list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.member_name {
+  padding: 4px 0;
+  font-size: 13px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.position {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* 캘린더 */
+.calendar_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 10px;
+}
+
+.cal_month {
+  font-weight: 600;
+}
+
+.cal_prev,
+.cal_next {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.weeks,
+.days {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.weeks li {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.days li {
+  min-height: 56px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 4px;
+}
+
+.days li.inactive {
+  background: #f8fafc;
+  color: #94a3b8;
+}
+
+/* 게시판*/
+.board-simple {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.board-simple li {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.board-simple .title {
+  display: block;
+  font-size: 14px;
+}
+
+.board-simple .meta {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.left_button,
+.right_button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #374151;
+}
+
+.left_button {
+  left: 20px;
+}
+
+.right_button {
+  right: 20px;
+}
+
