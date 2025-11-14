@@ -60,14 +60,32 @@ def add_todo():
     return jsonify(todo.to_dict()), 201
 
 # 3) 완료 토글
-@app.route("/api/todos/<int:id>", methods=["PATCH"])
+@app.route("/api/todos/<int:id>/toggle", methods=["PATCH"])
 def toggle_todo(id):
     todo = Todo.query.get_or_404(id)
     todo.completed = not todo.completed
     db.session.commit()
+
     return jsonify(todo.to_dict())
 
-# 4) 삭제
+# 4) 수정
+@app.route("api/todos/<int:id>", methods=["PATCH"])
+def update_todo(id):
+    todo = Todo.query.get_or_404(id)
+    data = request.get_json()
+    
+    if "text" in data:
+        new_text = (data["text"] or"").strip()
+        if not new_text:
+            return jsonify({"error: 내용을 입력해주세요."}), 400
+    
+    todo.text = new_text
+    db.session.commit()
+
+    return jsonify(todo.to_dict()), 200
+
+
+# 5) 삭제
 @app.route("/api/todos/<int:id>", methods=["DELETE"])
 def delete_todo(id):
     todo = Todo.query.get_or_404(id)
