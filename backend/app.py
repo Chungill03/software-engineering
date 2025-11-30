@@ -1,6 +1,6 @@
 from flask import Flask
 from extensions import db, cors
-from routes import todos_bp, board_bp
+from routes import todos_bp, board_bp, calendar_bp
 import os
 
 def create_app():
@@ -16,6 +16,7 @@ def create_app():
 
     app.register_blueprint(todos_bp)
     app.register_blueprint(board_bp)
+    app.register_blueprint(calendar_bp)
 
     with app.app_context():
         db.create_all()
