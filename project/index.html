@@ -1,152 +1,197 @@
-<!-- board / calendar / boardlist로 세개의 화면으로 구성
-     맨위의 화면전환버튼 top_convert의 data-view값으로
-     세가지화면중 어떤화면열지 구분함
-     할일(board) 보드 화면에도 할일추가나 이동관련된 걸 넣어야하는데
-     아직 미완
-     캘린더 / 게시판은 그냥 껍데기만 있는 느낌이라
-     보강 예정
-     
-     자바스크립트랑 지피티의 힘을빌려서 화면 넘기는거
-     작동시켜봤는데 충분히 됨-->
-
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>팀프로젝트 관리</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="layout">
+  <head>
+    <meta charset="UTF-8" />
+    <title>팀프로젝트 관리</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="calendar.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
 
-    <header class="top">
-      <div class="prototype">프로토타입</div>
-    </header>
+  <body>
+    <div class="layout">
+      <header class="top">
+        <div class="prototype">프로토타입</div>
+      </header>
 
-    <!-- 맨 위의 화면 전환 버튼 -->
-    <nav class="top_convert">
-      <button class="tab_1 active" data-view="board"></button>
-      <button class="tab_2" data-view="calendar"></button>
-      <button class="tab_3" data-view="boardlist"></button>
-    </nav>
+      <nav class="top_convert">
+        <button class="tab_1 active" data-view="board" type="button"></button>
+        <button class="tab_2" data-view="calendar" type="button"></button>
+        <button class="tab_3" data-view="boardlist" type="button"></button>
+      </nav>
 
-    <main class="content">
-      <button class="left_button" type="button">‹</button>
-      <button class="right_button" type="button">›</button>
+      <main class="content">
+        <button class="left_button" type="button">‹</button>
+        <button class="right_button" type="button">›</button>
 
-      <section class="main_card">
-        <!-- 할일 보드 -->
-        <section class="view is-active" id="board">
-          <h2 class="card_title">팀 진행도 현황</h2>
+        <section class="main_card">
+          <!-- TODO 화면 -->
+          <section class="view is-active" id="board">
+            <h2 class="card_title">팀 진행도 현황</h2>
 
-          <div class="status_list">
-            <div class="status_box">
-              <h3>할 일</h3>
-              <p>3개</p>
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">전체</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="activeCount">0</div>
+                <div class="stat-label">진행중</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="completedCount">0</div>
+                <div class="stat-label">완료</div>
+              </div>
             </div>
-            <div class="status_box">
-              <h3>진행중</h3>
-              <p>2개</p>
-            </div>
-            <div class="status_box">
-              <h3>완료</h3>
-              <p>5개</p>
-            </div>
-          </div>
 
-          <div class="member_box">
-            <h3 class="member_title">4조</h3>
-            <ul class="member_list">
-              <li class="member_name">인영 <span class="position">프론트1</span></li>
-              <li class="member_name">진수 <span class="position">프론트2</span></li>
-              <li class="member_name">충일 <span class="position">백엔드1</span></li>
-              <li class="member_name">민서 <span class="position">백엔드2</span></li>
+            <div class="todo-input-area">
+              <div class="todo-input-wrapper">
+                <input
+                  type="text"
+                  id="todoInput"
+                  placeholder="새로운 할 일을 입력하세요"
+                />
+
+                <span class="todo-date-icon">📅</span>
+
+                <input type="date" id="todoDate" class="hidden-date-input" />
+              </div>
+
+              <button id="addBtn" type="button">추가</button>
+            </div>
+
+            <div id="todoList"></div>
+          </section>
+
+          <!-- 캘린더 -->
+          <section class="view" id="calendar">
+            <h2 class="card_title">캘린더</h2>
+
+            <div class="calendar_head">
+              <button class="cal_prev" type="button">‹</button>
+              <p class="cal_month"></p>
+              <button class="cal_next" type="button">›</button>
+            </div>
+
+            <ul class="weeks">
+              <li>일</li>
+              <li>월</li>
+              <li>화</li>
+              <li>수</li>
+              <li>목</li>
+              <li>금</li>
+              <li>토</li>
             </ul>
-          </div>
+
+            <ul class="days"></ul>
+            <div id="calendar_panel" class="calendar_panel">
+              <h3 class="calendar-todo-title">날짜를 선택하세요</h3>
+              <ul id="calendarTodoList" class="calendar-todo-list"></ul>
+            </div>
+          </section>
+
+          <!-- 게시판 목록 -->
+          <section class="view" id="boardlist">
+            <h2 class="card_title">게시판</h2>
+
+            <button
+              id="writePostBtn"
+              class="add-btn"
+              style="margin-bottom: 15px"
+              type="button"
+            >
+              글 작성
+            </button>
+
+            <ul class="board-simple" id="boardListContainer"></ul>
+          </section>
+
+          <!-- 게시글 작성 화면 -->
+          <section class="view" id="post_write">
+            <h2 class="card_title">새 게시글 작성</h2>
+            <div id="postWriteError" style="display: none; color: red"></div>
+
+            <div class="post-form">
+              <input
+                type="text"
+                id="postTitleInput"
+                placeholder="제목"
+                class="text-input"
+              />
+              <textarea
+                id="postContentInput"
+                placeholder="내용"
+                rows="10"
+                class="text-area"
+              ></textarea>
+
+              <div class="form-actions">
+                <button id="submitPostBtn" class="add-btn" type="button">
+                  작성 완료
+                </button>
+                <button id="cancelPostBtn" class="cancel-btn" type="button">
+                  취소
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 게시글 상세 화면 -->
+          <section class="view" id="post_detail">
+            <button id="backToBoardListBtn" class="back-btn" type="button">
+              ← 게시판 목록
+            </button>
+
+            <h2 class="card_title" id="detailPostTitle"></h2>
+
+            <div class="post-meta">
+              <span id="detailPostLikes"></span>
+              <button id="likePostBtn" class="like-btn" type="button">
+                좋아요
+              </button>
+            </div>
+
+            <div class="post-content-detail" id="detailPostContent"></div>
+
+            <h3 class="comments-title">댓글</h3>
+
+            <div id="commentsContainer"></div>
+
+            <div class="comment-input-area">
+              <textarea
+                id="commentInput"
+                rows="3"
+                placeholder="댓글을 입력하세요"
+              ></textarea>
+              <button id="addCommentBtn" class="add-btn" type="button">
+                댓글 작성
+              </button>
+            </div>
+
+            <div id="commentError" style="display: none; color: red"></div>
+          </section>
         </section>
 
-        <!-- 캘린더 -->
-        <section class="view" id="calendar">
-          <h2 class="card_title">캘린더</h2>
+        <div
+          id="errorMessage"
+          style="
+            display: none;
+            color: red;
+            padding: 10px;
+            background: #fff8f8;
+            border: 1px solid red;
+            border-radius: 5px;
+            max-width: 780px;
+            margin: 0 auto 20px;
+          "
+        ></div>
+      </main>
+    </div>
 
-          <div class="calendar_head">
-            <button class="cal_prev">‹</button>
-            <p class="cal_month">2025년 11월</p>
-            <button class="cal_next">›</button>
-          </div>
-          
-          <ul class="weeks">
-            <li>일</li>
-            <li>월</li>
-            <li>화</li>
-            <li>수</li>
-            <li>목</li>
-            <li>금</li>
-            <li>토</li>
-          </ul>
-          
-          <ul class="days">
-            <li class="inactive">27</li>
-            <li class="inactive">28</li>
-            <li class="inactive">29</li>
-            <li class="inactive">30</li>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-            <li>4</li>
-            <li>5</li>
-            <li>6</li>
-            <li>7</li>
-            <li>8</li>
-            <li>9</li>
-            <li>10</li>
-            <li>11</li>
-            <li>12</li>
-            <li>13</li>
-            <li>14</li>
-            <li>15</li>
-            <li>16</li>
-            <li>17</li>
-            <li>18</li>
-            <li>19</li>
-            <li>20</li>
-            <li>21</li>
-            <li>22</li>
-            <li>23</li>
-            <li>24</li>
-            <li>25</li>
-            <li>26</li>
-            <li>27</li>
-            <li>28</li>
-            <li>29</li>
-            <li>30</li>
-            <li>31</li>
-          </ul>
-        </section>
-
-        <!-- 게시판 -->
-        <section class="view" id="boardlist">
-          <h2 class="card_title">게시판</h2>
-
-          <ul class="board-simple">
-            <li>
-              <span class="title">하이요</span>
-              <span class="meta">진수 · 11-12</span>
-            </li>
-            <li>
-              <span class="title">ㅎㅇ</span>
-              <span class="meta">민서 · 11-12</span>
-            </li>
-            <li>
-              <span class="title">Hello</span>
-              <span class="meta">충일 · 11-12</span>
-            </li>
-          </ul>
-        </section>
-      </section>
-    </main>
-  </div>
-
-</body>
-</html> 
-
+    <script src="script.js"></script>
+    <script src="calendar.js"></script>
+    <script src="board.js"></script>
+    <script src="todo.js"></script>
+  </body>
+</html>
