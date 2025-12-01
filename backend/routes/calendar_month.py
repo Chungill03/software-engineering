@@ -33,3 +33,4 @@ def get_month_calendar():
         "end": end,
         "items": filtered
     })
+ 
